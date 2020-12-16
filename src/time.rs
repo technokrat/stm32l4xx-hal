@@ -35,6 +35,9 @@ pub trait U32Ext {
 
     /// Wrap in `MilliSeconds`
     fn milliseconds(self) -> MilliSeconds;
+
+    /// Wrap in `MicroSeconds`
+    fn us(self) -> MicroSeconds;
 }
 
 impl U32Ext for u32 {
@@ -56,6 +59,10 @@ impl U32Ext for u32 {
 
     fn milliseconds(self) -> MilliSeconds {
         MilliSeconds(self)
+    }
+
+    fn us(self) -> MicroSeconds {
+        MicroSeconds(self)
     }
 }
 
@@ -81,6 +88,26 @@ impl From<u32> for Hertz {
     fn from(ms: u32) -> Self {
         if ms <= 1000 {
             Hertz((1000 + ms / 2) / ms)
+        } else {
+            Hertz(1)
+        }
+    }
+}
+
+impl From<MilliSeconds> for Hertz {
+    fn from(ms: MilliSeconds) -> Self {
+        if ms.0 <= 1000 {
+            Hertz((1000 + ms.0 / 2) / ms.0)
+        } else {
+            Hertz(1)
+        }
+    }
+}
+
+impl From<MicroSeconds> for Hertz {
+    fn from(us: MicroSeconds) -> Self {
+        if us.0 <= 1000000 {
+            Hertz((1000000 + us.0 / 2) / us.0)
         } else {
             Hertz(1)
         }
